@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Debug</title>
+<style>body{font-family:monospace;padding:20px;} table{border-collapse:collapse;} td,th{border:1px solid #ccc;padding:6px 10px;font-size:13px;} th{background:#eee;}</style>
+</head>
+<body>
+<h2>CSV Debug</h2>
+<div id="out">Lädt...</div>
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFwgYwfW9VIGiCf_Hx8YLiXh-8QhiU8EUX32w11M4beE_BgNwZDjdR_99fs27Xjf_crrHIYoXSdmWs/pub?output=csv';
+
+function parseCSV(text) {
+  const rows = [];
+  let cur = '', inQ = false, cells = [];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') { inQ = !inQ; }
+    else if (ch === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
+    else if ((ch === '\n' || ch === '\r') && !inQ) {
+      if (ch === '\r' && text[i+1] === '\n') i++;
+      cells.push(cur.trim());
+      if (cells.some(c => c)) rows.push(cells);
+      cells = []; cur = '';
+    } else { cur += ch; }
+  }
+  if (cur || cells.length) { cells.push(cur.trim()); if (cells.some(c=>c)) rows.push(cells); }
+  return rows.map(r => r.map(v => v.startsWith('"') && v.endsWith('"') ? v.slice(1,-1).replace(/""/g,'"') : v));
+}
+
+fetch(CSV_URL).then(r => r.text()).then(text => {
+  const rows = parseCSV(text);
+  const headers = rows[0];
+  let html = '<h3>Spaltenköpfe (' + headers.length + ' Spalten):</h3><ol>';
+  headers.forEach((h,i) => html += `<li><b>${i}</b>: "${h}" (${h.length} Zeichen)</li>`);
+  html += '</ol>';
+  html += '<h3>Erste 3 Datenzeilen:</h3>';
+  rows.slice(1,4).forEach((row, ri) => {
+    html += `<h4>Zeile ${ri+2}:</h4><table><tr><th>#</th><th>Spalte</th><th>Wert</th></tr>`;
+    headers.forEach((h,i) => {
+      html += `<tr><td>${i}</td><td>${h}</td><td>${row[i] ?? '<leer>'}</td></tr>`;
+    });
+    html += '</table>';
+  });
+  document.getElementById('out').innerHTML = html;
+}).catch(e => document.getElementById('out').textContent = 'Fehler: ' + e);
+</script>
+</body>
+</html>
