@@ -318,7 +318,27 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    cursor: pointer;
+    transition: color 0.15s;
   }
+
+  .book-summary.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+
+  .book-summary:hover { color: var(--text); }
+
+  .expand-hint {
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 4px;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .expand-hint:hover { color: var(--text-muted); }
 
   .card-footer {
     display: flex;
@@ -553,6 +573,14 @@ function parseCSV(text) {
   return rows.map(r => r.map(v => v.startsWith('"') && v.endsWith('"') ? v.slice(1,-1).replace(/""/g,'"') : v));
 }
 
+function toggleSummary(el) {
+  const expanded = el.classList.toggle('expanded');
+  const hint = el.nextElementSibling;
+  if (hint && hint.classList.contains('expand-hint')) {
+    hint.textContent = expanded ? '▴ weniger' : '▾ mehr lesen';
+  }
+}
+
 async function loadFromSheets() {
   try {
     const res = await fetch(CSV_URL);
@@ -620,7 +648,7 @@ function renderBooks() {
 
   let filtered = BOOKS.filter(b => {
     if (search && !b.titel.toLowerCase().includes(search) && !b.autor.toLowerCase().includes(search)) return false;
-    if (thema && b.thema !== thema) return false;
+    if (thema && !splitThemen(b.thema).includes(thema)) return false;
     if (activeStatus && b.status !== activeStatus) return false;
     if (b.rating && b.rating < activeMinRating) return false;
     if (b.seiten && b.seiten > activeMaxPages) return false;
@@ -654,10 +682,10 @@ function renderBooks() {
         </div>
         ${b.rating ? `<span class="rating-display">${starDisplay(b.rating)}</span>` : ''}
       </div>
-      ${b.zusammenfassung ? `<p class="book-summary">${b.zusammenfassung}</p>` : ''}
+      ${b.zusammenfassung ? `<p class="book-summary" onclick="toggleSummary(this)">${b.zusammenfassung}</p><span class="expand-hint" onclick="toggleSummary(this.previousElementSibling)">&#9662; mehr lesen</span>` : ''}
       <div class="card-footer">
         <div class="tags">
-          ${b.thema ? `<span class="tag thema">${b.thema}</span>` : ''}
+          ${splitThemen(b.thema).map(t => `<span class="tag thema">${t}</span>`).join('')}
           ${b.seiten ? `<span class="tag">${b.seiten} S.</span>` : ''}
           <span class="tag ${statusTag(b.status)}">${b.status || 'Offen'}</span>
         </div>
@@ -672,7 +700,9 @@ function updateStats() {
   const gelesen = BOOKS.filter(b => b.status === 'Gelesen').length;
   const liest = BOOKS.filter(b => b.status === 'Wird gerade gelesen').length;
   const offen = BOOKS.filter(b => b.status === 'Noch nicht gelesen').length;
-  const themen = new Set(BOOKS.map(b => b.thema).filter(Boolean)).size;
+  const themenSet = new Set();
+  BOOKS.forEach(b => splitThemen(b.thema).forEach(t => themenSet.add(t)));
+  const themen = themenSet.size;
   const ratings = BOOKS.filter(b => b.rating).map(b => b.rating);
   const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length) : 0;
 
@@ -687,9 +717,17 @@ function updateStats() {
   document.getElementById('header-count').textContent = total + ' Bücher';
 }
 
+function splitThemen(thema) {
+  if (!thema) return [];
+  return thema.split(/[,;|]+/).map(t => t.trim()).filter(Boolean);
+}
+
 function populateThemen() {
-  const themen = [...new Set(BOOKS.map(b => b.thema).filter(Boolean))].sort();
+  const alle = new Set();
+  BOOKS.forEach(b => splitThemen(b.thema).forEach(t => alle.add(t)));
+  const themen = [...alle].sort();
   const sel = document.getElementById('filter-thema');
+  sel.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
   themen.forEach(t => {
     const opt = document.createElement('option');
     opt.value = t;
