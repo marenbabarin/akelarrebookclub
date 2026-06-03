@@ -669,7 +669,7 @@ function renderBooks() {
   count.textContent = filtered.length + ' Buch' + (filtered.length !== 1 ? 'er' : '') + ' gefunden';
 
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="no-results"><p>Keine Bücher gefunden</p><p>Versuche andere Filtereinstellungen.</p></div>';
+    grid.innerHTML = '<div class="no-results"><p>No books found</p><p>Versuche andere Filtereinstellungen.</p></div>';
     return;
   }
 
