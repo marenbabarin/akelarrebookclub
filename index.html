@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buchclub Archiv</title>
+<title>Akelarre Book Club Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -407,7 +407,7 @@
 <body>
 
 <header>
-  <h1>Buchclub Archiv</h1>
+  <h1>Akelarre Book Club Archive</h1>
   <span id="header-count"></span>
 </header>
 
@@ -415,7 +415,7 @@
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation: spin 1s linear infinite; opacity:0.4;">
     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
   </svg>
-  <span>Bücher werden geladen…</span>
+  <span>Books are being loaded ...</span>
 </div>
 <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
@@ -423,14 +423,14 @@
   <aside>
     <div class="filter-section">
       <label>Suche</label>
-      <input type="text" id="search" placeholder="Titel oder Autor…">
+      <input type="text" id="search" placeholder="Title or Author">
     </div>
 
     <div class="filter-section">
-      <label>Thema</label>
+      <label>Theme</label>
       <div class="select-wrapper">
         <select id="filter-thema">
-          <option value="">Alle Themen</option>
+          <option value="">All Themes</option>
         </select>
       </div>
     </div>
@@ -446,9 +446,9 @@
     </div>
 
     <div class="filter-section">
-      <label>Mindest-Rating</label>
+      <label>Min. Rating</label>
       <div class="rating-filter">
-        <button class="rating-btn active" data-min="0">Alle</button>
+        <button class="rating-btn active" data-min="0">All</button>
         <button class="rating-btn" data-min="3">★ 3+</button>
         <button class="rating-btn" data-min="4">★ 4+</button>
         <button class="rating-btn" data-min="4.5">★ 4.5+</button>
@@ -456,14 +456,14 @@
     </div>
 
     <div class="filter-section">
-      <label>Max. Seitenanzahl</label>
+      <label>Max. Pages</label>
       <div class="select-wrapper">
         <select id="filter-pages">
-          <option value="9999">Alle Längen</option>
-          <option value="200">bis 200 Seiten</option>
-          <option value="300">bis 300 Seiten</option>
-          <option value="400">bis 400 Seiten</option>
-          <option value="500">bis 500 Seiten</option>
+          <option value="9999">All lengths</option>
+          <option value="200">up to 200 pages</option>
+          <option value="300"up to 300 pages</option>
+          <option value="400">up to 400 pages</option>
+          <option value="500">up to 500 pages</option>
         </select>
       </div>
     </div>
@@ -514,11 +514,11 @@ const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFwgYwfW9VIGiC
 // Spaltennamen im Sheet → interne Felder
 // Passe die linke Seite an, falls deine Spaltenköpfe anders heißen
 const SPALTEN_MAP = {
-  'Autor':            'autor',
   'Titel':            'titel',
+  'Autor':            'autor',
   'Zusammenfassung':  'zusammenfassung',
-  'Rating':           'rating',
   'Seiten':           'seiten',
+  'Rating':           'rating',
   'Storygraph':       'storygraph',
   'Thema':            'thema',
   'Status':           'status'
