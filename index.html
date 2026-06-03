@@ -536,26 +536,21 @@ const SPALTEN_MAP = {
 let BOOKS = [];
 
 function parseCSV(text) {
-  const lines = [];
-  let cur = '', inQuote = false;
+  const rows = [];
+  let cur = '', inQ = false, cells = [];
   for (let i = 0; i < text.length; i++) {
     const ch = text[i];
-    if (ch === '"') { inQuote = !inQuote; }
-    else if (ch === '\n' && !inQuote) { lines.push(cur); cur = ''; }
-    else { cur += ch; }
+    if (ch === '"') { inQ = !inQ; }
+    else if (ch === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
+    else if ((ch === '\n' || ch === '\r') && !inQ) {
+      if (ch === '\r' && text[i+1] === '\n') i++;
+      cells.push(cur.trim());
+      if (cells.some(c => c)) rows.push(cells);
+      cells = []; cur = '';
+    } else { cur += ch; }
   }
-  if (cur) lines.push(cur);
-  return lines.map(line => {
-    const cells = [], re = /("(?:[^"]|"")*"|[^,]*)/g;
-    let m;
-    while ((m = re.exec(line)) !== null) {
-      if (m.index === re.lastIndex) { re.lastIndex++; continue; }
-      let v = m[1];
-      if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1,-1).replace(/""/g,'"');
-      cells.push(v.trim());
-    }
-    return cells;
-  });
+  if (cur || cells.length) { cells.push(cur.trim()); if (cells.some(c=>c)) rows.push(cells); }
+  return rows.map(r => r.map(v => v.startsWith('"') && v.endsWith('"') ? v.slice(1,-1).replace(/""/g,'"') : v));
 }
 
 async function loadFromSheets() {
