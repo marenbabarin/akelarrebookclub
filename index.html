@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buchclub Archiv</title>
+<title>Akelarre Bookclub Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -427,7 +427,7 @@
 <body>
 
 <header>
-  <h1>Buchclub Archiv</h1>
+  <h1>Akelarre Book Club Archive</h1>
   <span id="header-count"></span>
 </header>
 
@@ -435,22 +435,22 @@
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation: spin 1s linear infinite; opacity:0.4;">
     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
   </svg>
-  <span>Bücher werden geladen…</span>
+  <span>Loading Books ...</span>
 </div>
 <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
 <div id="app" style="display:none;" class="layout">
   <aside>
     <div class="filter-section">
-      <label>Suche</label>
-      <input type="text" id="search" placeholder="Titel oder Autor…">
+      <label>Search</label>
+      <input type="text" id="search" placeholder="Title or Author ...">
     </div>
 
     <div class="filter-section">
-      <label>Thema</label>
+      <label>Theme</label>
       <div class="select-wrapper">
         <select id="filter-thema">
-          <option value="">Alle Themen</option>
+          <option value="">All Themes</option>
         </select>
       </div>
     </div>
@@ -458,17 +458,17 @@
     <div class="filter-section">
       <label>Status</label>
       <div class="status-pills">
-        <button class="pill active" data-status="">Alle Bücher <span class="pill-count" id="count-all">0</span></button>
-        <button class="pill" data-status="Noch nicht gelesen">Noch nicht gelesen <span class="pill-count" id="count-offen">0</span></button>
-        <button class="pill" data-status="Wird gerade gelesen">Wird gerade gelesen <span class="pill-count" id="count-liest">0</span></button>
-        <button class="pill" data-status="Gelesen">Gelesen <span class="pill-count" id="count-gelesen">0</span></button>
+        <button class="pill active" data-status="">All Books <span class="pill-count" id="count-all">0</span></button>
+        <button class="pill" data-status="Noch nicht gelesen">Not read <span class="pill-count" id="count-offen">0</span></button>
+        <button class="pill" data-status="Wird gerade gelesen">Being read now <span class="pill-count" id="count-liest">0</span></button>
+        <button class="pill" data-status="Gelesen">Read <span class="pill-count" id="count-gelesen">0</span></button>
       </div>
     </div>
 
     <div class="filter-section">
-      <label>Mindest-Rating</label>
+      <label>Min. Rating</label>
       <div class="rating-filter">
-        <button class="rating-btn active" data-min="0">Alle</button>
+        <button class="rating-btn active" data-min="0">All</button>
         <button class="rating-btn" data-min="3">★ 3+</button>
         <button class="rating-btn" data-min="4">★ 4+</button>
         <button class="rating-btn" data-min="4.5">★ 4.5+</button>
@@ -476,14 +476,14 @@
     </div>
 
     <div class="filter-section">
-      <label>Max. Seitenanzahl</label>
+      <label>Max. Pages</label>
       <div class="select-wrapper">
         <select id="filter-pages">
-          <option value="9999">Alle Längen</option>
-          <option value="200">bis 200 Seiten</option>
-          <option value="300">bis 300 Seiten</option>
-          <option value="400">bis 400 Seiten</option>
-          <option value="500">bis 500 Seiten</option>
+          <option value="9999">All lengths</option>
+          <option value="200">up to 200 pages</option>
+          <option value="300">up to 300 pages</option>
+          <option value="400">up to 400 pages</option>
+          <option value="500">up to 500 pages</option>
         </select>
       </div>
     </div>
@@ -491,15 +491,15 @@
     <div class="stats-row">
       <div class="stat-box">
         <span class="num" id="stat-total">0</span>
-        <span class="lbl">Bücher gesamt</span>
+        <span class="lbl">Books total</span>
       </div>
       <div class="stat-box">
         <span class="num" id="stat-gelesen">0</span>
-        <span class="lbl">Gelesen</span>
+        <span class="lbl">Read</span>
       </div>
       <div class="stat-box">
         <span class="num" id="stat-themen">0</span>
-        <span class="lbl">Themen</span>
+        <span class="lbl">Themes</span>
       </div>
       <div class="stat-box">
         <span class="num" id="stat-avg">0</span>
@@ -512,11 +512,11 @@
     <div class="results-header">
       <p id="results-count"></p>
       <select class="sort-select" id="sort">
-        <option value="title">Sortierung: Titel A–Z</option>
-        <option value="author">Sortierung: Autor A–Z</option>
-        <option value="rating-desc">Sortierung: Bestes Rating</option>
-        <option value="pages-asc">Sortierung: Kürzeste zuerst</option>
-        <option value="pages-desc">Sortierung: Längste zuerst</option>
+        <option value="title">Sort by: Title A–Z</option>
+        <option value="author">Sort by: Author A–Z</option>
+        <option value="rating-desc">Sort by: Best Rating</option>
+        <option value="pages-asc">Sort by: Shortest first</option>
+        <option value="pages-desc">Sort by: Longest first</option>
       </select>
     </div>
     <div class="books-grid" id="books-grid"></div>
