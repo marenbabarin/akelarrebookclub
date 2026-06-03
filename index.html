@@ -534,12 +534,12 @@ const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFwgYwfW9VIGiC
 // Spaltennamen im Sheet → interne Felder
 // Passe die linke Seite an, falls deine Spaltenköpfe anders heißen
 const STATUS_MAP = {
-  'Yes': 'Gelesen',
-  'No': 'Noch nicht gelesen',
-  'Reading': 'Wird gerade gelesen',
-  'yes': 'Gelesen',
-  'no': 'Noch nicht gelesen',
-  'reading': 'Wird gerade gelesen'
+  'Yes': 'Read',
+  'No': 'Not read',
+  'Reading': 'Reading now',
+  'yes': 'Read',
+  'no': 'Not Read',
+  'reading': 'Reading now'
 };
 
 const SPALTEN_MAP = {
@@ -577,7 +577,7 @@ function toggleSummary(el) {
   const expanded = el.classList.toggle('expanded');
   const hint = el.nextElementSibling;
   if (hint && hint.classList.contains('expand-hint')) {
-    hint.textContent = expanded ? '▴ weniger' : '▾ mehr lesen';
+    hint.textContent = expanded ? '▴ less' : '▾ more';
   }
 }
 
