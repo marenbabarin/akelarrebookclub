@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Debug</title></head>
+<body>
+<pre id="out">Lädt...</pre>
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFwgYwfW9VIGiCf_Hx8YLiXh-8QhiU8EUX32w11M4beE_BgNwZDjdR_99fs27Xjf_crrHIYoXSdmWs/pub?output=csv';
+
+fetch(CSV_URL)
+  .then(r => r.text())
+  .then(text => {
+    const lines = text.split('\n').slice(0, 4);
+    document.getElementById('out').textContent = 
+      'RAW ERSTE 4 ZEILEN:\n\n' + lines.join('\n\n---\n\n');
+  });
+</script>
+</body>
+</html>
