@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buchclub Archiv</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f4ef;
+    --surface: #fffefb;
+    --border: #e2ddd5;
+    --border-light: #ede9e2;
+    --text: #1a1814;
+    --text-muted: #7a7469;
+    --text-faint: #b0a99f;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --accent-mid: #4a8c62;
+    --amber: #8a5c1a;
+    --amber-light: #fdf3e3;
+    --coral: #8c3a2a;
+    --coral-light: #fdecea;
+    --purple: #4a3580;
+    --purple-light: #eeebf8;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+
+  header h1 {
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  header span {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 77px);
+  }
+
+  aside {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .filter-section label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .filter-section input[type="text"],
+  .filter-section select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .filter-section input[type="text"]:focus,
+  .filter-section select:focus {
+    border-color: var(--accent-mid);
+  }
+
+  .select-wrapper {
+    position: relative;
+  }
+
+  .select-wrapper::after {
+    content: '▾';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-faint);
+    font-size: 12px;
+    pointer-events: none;
+  }
+
+  .status-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pill {
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pill:hover { background: var(--bg); border-color: var(--border); }
+
+  .pill.active {
+    background: var(--accent-light);
+    border-color: var(--accent-mid);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .pill-count {
+    font-size: 11px;
+    color: var(--text-faint);
+    background: var(--bg);
+    padding: 1px 7px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+  }
+
+  .pill.active .pill-count {
+    background: var(--surface);
+    border-color: var(--accent-mid);
+    color: var(--accent-mid);
+  }
+
+  .rating-filter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .rating-btn {
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .rating-btn:hover { background: var(--amber-light); border-color: var(--amber); color: var(--amber); }
+  .rating-btn.active { background: var(--amber-light); border-color: var(--amber); color: var(--amber); font-weight: 500; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-box .num {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+  }
+
+  .stat-box .lbl {
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+
+  main {
+    padding: 28px 32px;
+  }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .results-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .sort-select {
+    padding: 7px 32px 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b0a99f' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .book-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    transition: border-color 0.15s, transform 0.15s;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .book-card:hover {
+    border-color: #c9c3b8;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+
+  .book-card.gelesen { opacity: 0.7; }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .book-title {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+  }
+
+  .book-author {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .rating-display {
+    font-size: 13px;
+    color: var(--amber);
+    white-space: nowrap;
+    font-weight: 500;
+    padding: 3px 8px;
+    background: var(--amber-light);
+    border-radius: var(--radius);
+    border: 1px solid #e8d5b0;
+  }
+
+  .book-summary {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--bg);
+  }
+
+  .tag.thema {
+    background: var(--purple-light);
+    border-color: #c5bcec;
+    color: var(--purple);
+  }
+
+  .tag.status-gelesen {
+    background: var(--accent-light);
+    border-color: #a8ccb5;
+    color: var(--accent);
+  }
+
+  .tag.status-liest {
+    background: var(--amber-light);
+    border-color: #e8d5b0;
+    color: var(--amber);
+  }
+
+  .tag.status-offen {
+    background: var(--bg);
+    border-color: var(--border);
+    color: var(--text-faint);
+  }
+
+  .storygraph-link {
+    font-size: 12px;
+    color: var(--accent-mid);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+  }
+
+  .storygraph-link:hover { opacity: 1; text-decoration: underline; }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+
+  .no-results p:first-child {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { border-right: none; border-bottom: 1px solid var(--border); }
+    header { padding: 20px 20px; }
+    main { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Buchclub Archiv</h1>
+  <span id="header-count"></span>
+</header>
+
+<div id="loading" style="display:flex; align-items:center; justify-content:center; min-height:60vh; text-align:center; color:var(--text-muted); font-size:15px; flex-direction:column; gap:12px;">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation: spin 1s linear infinite; opacity:0.4;">
+    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+  </svg>
+  <span>Bücher werden geladen…</span>
+</div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+<div id="app" style="display:none;" class="layout">
+  <aside>
+    <div class="filter-section">
+      <label>Suche</label>
+      <input type="text" id="search" placeholder="Titel oder Autor…">
+    </div>
+
+    <div class="filter-section">
+      <label>Thema</label>
+      <div class="select-wrapper">
+        <select id="filter-thema">
+          <option value="">Alle Themen</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <label>Status</label>
+      <div class="status-pills">
+        <button class="pill active" data-status="">Alle Bücher <span class="pill-count" id="count-all">0</span></button>
+        <button class="pill" data-status="Noch nicht gelesen">Noch nicht gelesen <span class="pill-count" id="count-offen">0</span></button>
+        <button class="pill" data-status="Wird gerade gelesen">Wird gerade gelesen <span class="pill-count" id="count-liest">0</span></button>
+        <button class="pill" data-status="Gelesen">Gelesen <span class="pill-count" id="count-gelesen">0</span></button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <label>Mindest-Rating</label>
+      <div class="rating-filter">
+        <button class="rating-btn active" data-min="0">Alle</button>
+        <button class="rating-btn" data-min="3">★ 3+</button>
+        <button class="rating-btn" data-min="4">★ 4+</button>
+        <button class="rating-btn" data-min="4.5">★ 4.5+</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <label>Max. Seitenanzahl</label>
+      <div class="select-wrapper">
+        <select id="filter-pages">
+          <option value="9999">Alle Längen</option>
+          <option value="200">bis 200 Seiten</option>
+          <option value="300">bis 300 Seiten</option>
+          <option value="400">bis 400 Seiten</option>
+          <option value="500">bis 500 Seiten</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="num" id="stat-total">0</span>
+        <span class="lbl">Bücher gesamt</span>
+      </div>
+      <div class="stat-box">
+        <span class="num" id="stat-gelesen">0</span>
+        <span class="lbl">Gelesen</span>
+      </div>
+      <div class="stat-box">
+        <span class="num" id="stat-themen">0</span>
+        <span class="lbl">Themen</span>
+      </div>
+      <div class="stat-box">
+        <span class="num" id="stat-avg">0</span>
+        <span class="lbl">Ø Rating</span>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="results-header">
+      <p id="results-count"></p>
+      <select class="sort-select" id="sort">
+        <option value="title">Sortierung: Titel A–Z</option>
+        <option value="author">Sortierung: Autor A–Z</option>
+        <option value="rating-desc">Sortierung: Bestes Rating</option>
+        <option value="pages-asc">Sortierung: Kürzeste zuerst</option>
+        <option value="pages-desc">Sortierung: Längste zuerst</option>
+      </select>
+    </div>
+    <div class="books-grid" id="books-grid"></div>
+  </main>
+</div><!-- #app -->
+
+<script>
+// =============================================================
+//  GOOGLE SHEETS ANBINDUNG
+//  Tabellen-ID aus der URL deines Google Sheets
+// =============================================================
+
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFwgYwfW9VIGiCf_Hx8YLiXh-8QhiU8EUX32w11M4beE_BgNwZDjdR_99fs27Xjf_crrHIYoXSdmWs/pub?output=csv';
+
+// Spaltennamen im Sheet → interne Felder
+// Passe die linke Seite an, falls deine Spaltenköpfe anders heißen
+const SPALTEN_MAP = {
+  'Autor':            'autor',
+  'Titel':            'titel',
+  'Zusammenfassung':  'zusammenfassung',
+  'Rating':           'rating',
+  'Seiten':           'seiten',
+  'Storygraph':       'storygraph',
+  'Thema':            'thema',
+  'Status':           'status'
+};
+
+let BOOKS = [];
+
+function parseCSV(text) {
+  const lines = [];
+  let cur = '', inQuote = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') { inQuote = !inQuote; }
+    else if (ch === '\n' && !inQuote) { lines.push(cur); cur = ''; }
+    else { cur += ch; }
+  }
+  if (cur) lines.push(cur);
+  return lines.map(line => {
+    const cells = [], re = /("(?:[^"]|"")*"|[^,]*)/g;
+    let m;
+    while ((m = re.exec(line)) !== null) {
+      if (m.index === re.lastIndex) { re.lastIndex++; continue; }
+      let v = m[1];
+      if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1,-1).replace(/""/g,'"');
+      cells.push(v.trim());
+    }
+    return cells;
+  });
+}
+
+async function loadFromSheets() {
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text).filter(r => r.some(c => c));
+    if (rows.length < 2) throw new Error('Keine Daten');
+
+    const headers = rows[0];
+    BOOKS = rows.slice(1).map(row => {
+      const obj = {};
+      headers.forEach((h, i) => {
+        const key = SPALTEN_MAP[h.trim()];
+        if (!key) return;
+        const val = (row[i] || '').trim();
+        if (key === 'rating' || key === 'seiten') {
+          obj[key] = val !== '' ? parseFloat(val.replace(',', '.')) : null;
+        } else {
+          obj[key] = val;
+        }
+      });
+      return obj;
+    }).filter(b => b.titel);
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'grid';
+    populateThemen();
+    updateStats();
+    renderBooks();
+  } catch (err) {
+    document.getElementById('loading').innerHTML =
+      '<p style="color:var(--coral)">⚠ Fehler beim Laden der Daten.<br><small>Stelle sicher, dass das Sheet unter Datei → Im Web veröffentlichen freigegeben ist.</small></p>';
+    console.error(err);
+  }
+}
+
+// =============================================================
+//  AB HIER NICHTS ÄNDERN — Dashboard-Logik
+// =============================================================
+
+let activeStatus = '';
+let activeMinRating = 0;
+let activeMaxPages = 9999;
+
+function starDisplay(rating) {
+  if (!rating && rating !== 0) return '—';
+  return '★ ' + rating.toFixed(1);
+}
+
+function statusTag(status) {
+  const map = {
+    'Gelesen': 'status-gelesen',
+    'Wird gerade gelesen': 'status-liest',
+    'Noch nicht gelesen': 'status-offen'
+  };
+  return map[status] || 'status-offen';
+}
+
+function renderBooks() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const thema = document.getElementById('filter-thema').value;
+  const sort = document.getElementById('sort').value;
+
+  let filtered = BOOKS.filter(b => {
+    if (search && !b.titel.toLowerCase().includes(search) && !b.autor.toLowerCase().includes(search)) return false;
+    if (thema && b.thema !== thema) return false;
+    if (activeStatus && b.status !== activeStatus) return false;
+    if (b.rating && b.rating < activeMinRating) return false;
+    if (b.seiten && b.seiten > activeMaxPages) return false;
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    if (sort === 'title') return a.titel.localeCompare(b.titel, 'de');
+    if (sort === 'author') return a.autor.localeCompare(b.autor, 'de');
+    if (sort === 'rating-desc') return (b.rating || 0) - (a.rating || 0);
+    if (sort === 'pages-asc') return (a.seiten || 0) - (b.seiten || 0);
+    if (sort === 'pages-desc') return (b.seiten || 0) - (a.seiten || 0);
+    return 0;
+  });
+
+  const grid = document.getElementById('books-grid');
+  const count = document.getElementById('results-count');
+  count.textContent = filtered.length + ' Buch' + (filtered.length !== 1 ? 'er' : '') + ' gefunden';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="no-results"><p>Keine Bücher gefunden</p><p>Versuche andere Filtereinstellungen.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(b => `
+    <div class="book-card ${b.status === 'Gelesen' ? 'gelesen' : ''}">
+      <div class="card-top">
+        <div>
+          <div class="book-title">${b.titel}</div>
+          <div class="book-author">${b.autor}</div>
+        </div>
+        ${b.rating ? `<span class="rating-display">${starDisplay(b.rating)}</span>` : ''}
+      </div>
+      ${b.zusammenfassung ? `<p class="book-summary">${b.zusammenfassung}</p>` : ''}
+      <div class="card-footer">
+        <div class="tags">
+          ${b.thema ? `<span class="tag thema">${b.thema}</span>` : ''}
+          ${b.seiten ? `<span class="tag">${b.seiten} S.</span>` : ''}
+          <span class="tag ${statusTag(b.status)}">${b.status || 'Offen'}</span>
+        </div>
+        ${b.storygraph ? `<a class="storygraph-link" href="${b.storygraph}" target="_blank">Storygraph ↗</a>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateStats() {
+  const total = BOOKS.length;
+  const gelesen = BOOKS.filter(b => b.status === 'Gelesen').length;
+  const liest = BOOKS.filter(b => b.status === 'Wird gerade gelesen').length;
+  const offen = BOOKS.filter(b => b.status === 'Noch nicht gelesen').length;
+  const themen = new Set(BOOKS.map(b => b.thema).filter(Boolean)).size;
+  const ratings = BOOKS.filter(b => b.rating).map(b => b.rating);
+  const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length) : 0;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-gelesen').textContent = gelesen;
+  document.getElementById('stat-themen').textContent = themen;
+  document.getElementById('stat-avg').textContent = avg.toFixed(1);
+  document.getElementById('count-all').textContent = total;
+  document.getElementById('count-gelesen').textContent = gelesen;
+  document.getElementById('count-liest').textContent = liest;
+  document.getElementById('count-offen').textContent = offen;
+  document.getElementById('header-count').textContent = total + ' Bücher';
+}
+
+function populateThemen() {
+  const themen = [...new Set(BOOKS.map(b => b.thema).filter(Boolean))].sort();
+  const sel = document.getElementById('filter-thema');
+  themen.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t;
+    sel.appendChild(opt);
+  });
+}
+
+document.getElementById('search').addEventListener('input', renderBooks);
+document.getElementById('filter-thema').addEventListener('change', renderBooks);
+document.getElementById('sort').addEventListener('change', renderBooks);
+document.getElementById('filter-pages').addEventListener('change', e => {
+  activeMaxPages = parseInt(e.target.value);
+  renderBooks();
+});
+
+document.querySelectorAll('.pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    activeStatus = btn.dataset.status;
+    renderBooks();
+  });
+});
+
+document.querySelectorAll('.rating-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeMinRating = parseFloat(btn.dataset.min);
+    renderBooks();
+  });
+});
+
+loadFromSheets();
+</script>
+</body>
+</html>
