@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akelarre Book Club Archive</title>
+<title>Buchclub Archiv</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -407,7 +407,7 @@
 <body>
 
 <header>
-  <h1>Akelarre Book Club Archive</h1>
+  <h1>Buchclub Archiv</h1>
   <span id="header-count"></span>
 </header>
 
@@ -415,7 +415,7 @@
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation: spin 1s linear infinite; opacity:0.4;">
     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
   </svg>
-  <span>Books are being loaded ...</span>
+  <span>Bücher werden geladen…</span>
 </div>
 <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
@@ -423,14 +423,14 @@
   <aside>
     <div class="filter-section">
       <label>Suche</label>
-      <input type="text" id="search" placeholder="Title or Author">
+      <input type="text" id="search" placeholder="Titel oder Autor…">
     </div>
 
     <div class="filter-section">
-      <label>Theme</label>
+      <label>Thema</label>
       <div class="select-wrapper">
         <select id="filter-thema">
-          <option value="">All Themes</option>
+          <option value="">Alle Themen</option>
         </select>
       </div>
     </div>
@@ -446,9 +446,9 @@
     </div>
 
     <div class="filter-section">
-      <label>Min. Rating</label>
+      <label>Mindest-Rating</label>
       <div class="rating-filter">
-        <button class="rating-btn active" data-min="0">All</button>
+        <button class="rating-btn active" data-min="0">Alle</button>
         <button class="rating-btn" data-min="3">★ 3+</button>
         <button class="rating-btn" data-min="4">★ 4+</button>
         <button class="rating-btn" data-min="4.5">★ 4.5+</button>
@@ -456,14 +456,14 @@
     </div>
 
     <div class="filter-section">
-      <label>Max. Pages</label>
+      <label>Max. Seitenanzahl</label>
       <div class="select-wrapper">
         <select id="filter-pages">
-          <option value="9999">All lengths</option>
-          <option value="200">up to 200 pages</option>
-          <option value="300"up to 300 pages</option>
-          <option value="400">up to 400 pages</option>
-          <option value="500">up to 500 pages</option>
+          <option value="9999">Alle Längen</option>
+          <option value="200">bis 200 Seiten</option>
+          <option value="300">bis 300 Seiten</option>
+          <option value="400">bis 400 Seiten</option>
+          <option value="500">bis 500 Seiten</option>
         </select>
       </div>
     </div>
@@ -513,12 +513,21 @@ const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQFwgYwfW9VIGiC
 
 // Spaltennamen im Sheet → interne Felder
 // Passe die linke Seite an, falls deine Spaltenköpfe anders heißen
+const STATUS_MAP = {
+  'Yes': 'Gelesen',
+  'No': 'Noch nicht gelesen',
+  'Reading': 'Wird gerade gelesen',
+  'yes': 'Gelesen',
+  'no': 'Noch nicht gelesen',
+  'reading': 'Wird gerade gelesen'
+};
+
 const SPALTEN_MAP = {
-  'Titel':            'titel',
   'Autor':            'autor',
+  'Titel':            'titel',
   'Zusammenfassung':  'zusammenfassung',
-  'Seiten':           'seiten',
   'Rating':           'rating',
+  'Seiten':           'seiten',
   'Storygraph':       'storygraph',
   'Thema':            'thema',
   'Status':           'status'
@@ -566,6 +575,8 @@ async function loadFromSheets() {
         const val = (row[i] || '').trim();
         if (key === 'rating' || key === 'seiten') {
           obj[key] = val !== '' ? parseFloat(val.replace(',', '.')) : null;
+        } else if (key === 'status') {
+          obj[key] = STATUS_MAP[val] || val;
         } else {
           obj[key] = val;
         }
