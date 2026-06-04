@@ -690,7 +690,7 @@ function renderBooks() {
         </div>
         ${b.rating ? `<span class="rating-display">${starDisplay(b.rating)}</span>` : ''}
       </div>
-      ${b.zusammenfassung ? `<p class="book-summary" onclick="toggleSummary(this)">${b.zusammenfassung}</p><span class="expand-hint" onclick="toggleSummary(this.previousElementSibling)">&#9662; mehr lesen</span>` : ''}
+      ${b.zusammenfassung ? `<p class="book-summary" onclick="toggleSummary(this)">${b.zusammenfassung}</p><span class="expand-hint" onclick="toggleSummary(this.previousElementSibling)">&#9662; read more</span>` : ''}
       <div class="card-footer">
         <div class="tags">
           ${splitThemes(b.thema).map(t => `<span class="tag thema">${t}</span>`).join('')}
