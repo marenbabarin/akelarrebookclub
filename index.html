@@ -41,14 +41,6 @@
     line-height: 1.5;
   }
 
-  header {
-    background: var(--text);
-    border-bottom: 1px solid var(--border);
-    padding: 24px 40px;
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-  }
 
   header h1 {
     font-family: "Germania One", system-ui;
@@ -428,9 +420,21 @@
 </head>
 <body>
 
-<header>
-  <h1>Akelarre Book Club Archive</h1>
-  <span id="header-count"></span>
+<header style="
+  background-image: url('https://github.com/marenbabarin/akelarrebookclub/blob/46d2c6975a00676dec42e90f47363803a4d97ffe/Banner%20Archive.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 180px;
+  display: flex;
+  align-items: flex-end;
+  padding: 28px 40px;
+  position: relative;
+">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);"></div>
+  <div style="position:relative;z-index:1;">
+    <h1 style="color:#fff;">Akelarre Book Club Archive</h1>
+    <span id="header-count" style="color:rgba(255,255,255,0.75);"></span>
+  </div>
 </header>
 
 <div id="loading" style="display:flex; align-items:center; justify-content:center; min-height:60vh; text-align:center; color:var(--text-muted); font-size:15px; flex-direction:column; gap:12px;">
