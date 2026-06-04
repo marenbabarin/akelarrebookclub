@@ -6,7 +6,7 @@
 <title>Akelarre Book Club Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Germania+One&family=Goudy+Bookletter+1911&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -33,11 +33,11 @@
   }
 
   body {
-    font-family: 'Goudy Bookletter 1911', serif;
+    font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1.5;
   }
 
@@ -51,15 +51,15 @@
   }
 
   header h1 {
-    font-family: 'Germania One', system-ui;
-    font-size: 40px;
-    font-weight: 400;
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    font-weight: 500;
     letter-spacing: -0.3px;
     color: var(--text);
   }
 
   header span {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--text-muted);
   }
 
@@ -79,7 +79,7 @@
   }
 
   .filter-section label {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -95,8 +95,8 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--bg);
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
     color: var(--text);
     outline: none;
     transition: border-color 0.15s;
@@ -120,7 +120,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-faint);
-    font-size: 14px;
+    font-size: 12px;
     pointer-events: none;
   }
 
@@ -135,8 +135,8 @@
     border-radius: var(--radius);
     border: 1px solid var(--border);
     background: transparent;
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
     color: var(--text-muted);
     cursor: pointer;
     text-align: left;
@@ -156,7 +156,7 @@
   }
 
   .pill-count {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--text-faint);
     background: var(--bg);
     padding: 1px 7px;
@@ -181,8 +181,8 @@
     border-radius: var(--radius);
     border: 1px solid var(--border);
     background: transparent;
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
     color: var(--text-muted);
     cursor: pointer;
     transition: all 0.15s;
@@ -207,15 +207,15 @@
   }
 
   .stat-box .num {
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 24px;
-    font-weight: 400;
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 500;
     color: var(--text);
     display: block;
   }
 
   .stat-box .lbl {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--text-faint);
   }
 
@@ -231,7 +231,7 @@
   }
 
   .results-header p {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--text-muted);
   }
 
@@ -240,8 +240,8 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--surface);
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
     color: var(--text);
     outline: none;
     appearance: none;
@@ -286,21 +286,21 @@
   }
 
   .book-title {
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 18px;
-    font-weight: 400;
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--text);
     line-height: 1.35;
   }
 
   .book-author {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--text-muted);
     margin-top: 3px;
   }
 
   .rating-display {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--amber);
     white-space: nowrap;
     font-weight: 500;
@@ -311,7 +311,7 @@
   }
 
   .book-summary {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--text-muted);
     line-height: 1.55;
     display: -webkit-box;
@@ -331,7 +331,7 @@
   .book-summary:hover { color: var(--text); }
 
   .expand-hint {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--text-faint);
     margin-top: 4px;
     cursor: pointer;
@@ -357,7 +357,7 @@
   }
 
   .tag {
-    font-size: 13px;
+    font-size: 11px;
     padding: 3px 9px;
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -390,7 +390,7 @@
   }
 
   .storygraph-link {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--accent-mid);
     text-decoration: none;
     display: flex;
@@ -410,8 +410,8 @@
   }
 
   .no-results p:first-child {
-    font-family: 'Goudy Bookletter 1911', serif;
-    font-size: 20px;
+    font-family: 'Lora', serif;
+    font-size: 18px;
     margin-bottom: 8px;
     color: var(--text);
   }
@@ -422,6 +422,7 @@
     header { padding: 20px 20px; }
     main { padding: 20px; }
   }
+
 </style>
 </head>
 <body>
