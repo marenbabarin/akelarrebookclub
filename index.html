@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akelarre Bookclub Archive</title>
+<title>Book Club Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -427,7 +427,7 @@
 <body>
 
 <header>
-  <h1>Akelarre Book Club Archive</h1>
+  <h1>Book Club Archive</h1>
   <span id="header-count"></span>
 </header>
 
@@ -435,7 +435,7 @@
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation: spin 1s linear infinite; opacity:0.4;">
     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
   </svg>
-  <span>Loading Books ...</span>
+  <span>Loading books…</span>
 </div>
 <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
@@ -443,7 +443,7 @@
   <aside>
     <div class="filter-section">
       <label>Search</label>
-      <input type="text" id="search" placeholder="Title or Author ...">
+      <input type="text" id="search" placeholder="Title or author…">
     </div>
 
     <div class="filter-section">
@@ -458,17 +458,17 @@
     <div class="filter-section">
       <label>Status</label>
       <div class="status-pills">
-        <button class="pill active" data-status="">All books <span class="pill-count" id="count-all">0</span></button>
-        <button class="pill" data-status="Noch nicht gelesen">Not read <span class="pill-count" id="count-offen">0</span></button>
-        <button class="pill" data-status="Wird gerade gelesen">Reading <span class="pill-count" id="count-liest">0</span></button>
+        <button class="pill active" data-status="">All Books <span class="pill-count" id="count-all">0</span></button>
+        <button class="pill" data-status="Noch nicht gelesen">Not Yet Read <span class="pill-count" id="count-offen">0</span></button>
+        <button class="pill" data-status="Wird gerade gelesen">Currently Reading <span class="pill-count" id="count-liest">0</span></button>
         <button class="pill" data-status="Gelesen">Read <span class="pill-count" id="count-gelesen">0</span></button>
       </div>
     </div>
 
     <div class="filter-section">
-      <label>Min. Rating</label>
+      <label>Minimum Rating</label>
       <div class="rating-filter">
-        <button class="rating-btn active" data-min="0">All</button>
+        <button class="rating-btn active" data-min="0">Alle</button>
         <button class="rating-btn" data-min="3">★ 3+</button>
         <button class="rating-btn" data-min="4">★ 4+</button>
         <button class="rating-btn" data-min="4.5">★ 4.5+</button>
@@ -479,7 +479,7 @@
       <label>Max. Pages</label>
       <div class="select-wrapper">
         <select id="filter-pages">
-          <option value="9999">All lengths</option>
+          <option value="9999">Any Length</option>
           <option value="200">up to 200 pages</option>
           <option value="300">up to 300 pages</option>
           <option value="400">up to 400 pages</option>
@@ -503,7 +503,7 @@
       </div>
       <div class="stat-box">
         <span class="num" id="stat-avg">0</span>
-        <span class="lbl">Ø Rating</span>
+        <span class="lbl">Avg. Rating</span>
       </div>
     </div>
   </aside>
@@ -512,11 +512,11 @@
     <div class="results-header">
       <p id="results-count"></p>
       <select class="sort-select" id="sort">
-        <option value="title">Sort by: Title A–Z</option>
-        <option value="author">Sort by: Author A–Z</option>
-        <option value="rating-desc">Sort by: Best Rating</option>
-        <option value="pages-asc">Sort by: Shortest first</option>
-        <option value="pages-desc">Sort by: Longest first</option>
+        <option value="title">Sort: Title A–Z</option>
+        <option value="author">Sort: Author A–Z</option>
+        <option value="rating-desc">Sort: Best Rating</option>
+        <option value="pages-asc">Sort: Shortest first</option>
+        <option value="pages-desc">Sort: Longest first</option>
       </select>
     </div>
     <div class="books-grid" id="books-grid"></div>
@@ -540,6 +540,12 @@ const STATUS_MAP = {
   'yes': 'Gelesen',
   'no': 'Noch nicht gelesen',
   'reading': 'Wird gerade gelesen'
+};
+
+const STATUS_LABEL = {
+  'Gelesen':             'Read',
+  'Noch nicht gelesen':  'Not Yet Read',
+  'Wird gerade gelesen': 'Currently Reading',
 };
 
 const SPALTEN_MAP = {
@@ -577,7 +583,7 @@ function toggleSummary(el) {
   const expanded = el.classList.toggle('expanded');
   const hint = el.nextElementSibling;
   if (hint && hint.classList.contains('expand-hint')) {
-    hint.textContent = expanded ? '▴ less' : '▾ more';
+    hint.textContent = expanded ? '▴ show less' : '▾ read more';
   }
 }
 
@@ -609,12 +615,12 @@ async function loadFromSheets() {
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'grid';
-    populateThemen();
+    populateThemes();
     updateStats();
     renderBooks();
   } catch (err) {
     document.getElementById('loading').innerHTML =
-      '<p style="color:var(--coral)">⚠ Fehler beim Laden der Daten.<br><small>Stelle sicher, dass das Sheet unter Datei → Im Web veröffentlichen freigegeben ist.</small></p>';
+      '<p style="color:var(--coral)">⚠ Error loading data.<br><small>Make sure the sheet is published via File → Publish to the web.</small></p>';
     console.error(err);
   }
 }
@@ -648,7 +654,7 @@ function renderBooks() {
 
   let filtered = BOOKS.filter(b => {
     if (search && !b.titel.toLowerCase().includes(search) && !b.autor.toLowerCase().includes(search)) return false;
-    if (thema && !splitThemen(b.thema).includes(thema)) return false;
+    if (thema && !splitThemes(b.thema).includes(thema)) return false;
     if (activeStatus && b.status !== activeStatus) return false;
     if (b.rating && b.rating < activeMinRating) return false;
     if (b.seiten && b.seiten > activeMaxPages) return false;
@@ -666,10 +672,10 @@ function renderBooks() {
 
   const grid = document.getElementById('books-grid');
   const count = document.getElementById('results-count');
-  count.textContent = filtered.length + ' Buch' + (filtered.length !== 1 ? 'er' : '') + ' gefunden';
+  count.textContent = filtered.length + ' book' + (filtered.length !== 1 ? 's' : '') + ' found';
 
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="no-results"><p>No books found</p><p>Versuche andere Filtereinstellungen.</p></div>';
+    grid.innerHTML = '<div class="no-results"><p>No books found</p><p>Try different filter settings.</p></div>';
     return;
   }
 
@@ -685,9 +691,9 @@ function renderBooks() {
       ${b.zusammenfassung ? `<p class="book-summary" onclick="toggleSummary(this)">${b.zusammenfassung}</p><span class="expand-hint" onclick="toggleSummary(this.previousElementSibling)">&#9662; mehr lesen</span>` : ''}
       <div class="card-footer">
         <div class="tags">
-          ${splitThemen(b.thema).map(t => `<span class="tag thema">${t}</span>`).join('')}
+          ${splitThemes(b.thema).map(t => `<span class="tag thema">${t}</span>`).join('')}
           ${b.seiten ? `<span class="tag">${b.seiten} S.</span>` : ''}
-          <span class="tag ${statusTag(b.status)}">${b.status || 'Offen'}</span>
+          <span class="tag ${statusTag(b.status)}">${STATUS_LABEL[b.status] || b.status}</span>
         </div>
         ${b.storygraph ? `<a class="storygraph-link" href="${b.storygraph}" target="_blank">Storygraph ↗</a>` : ''}
       </div>
@@ -701,7 +707,7 @@ function updateStats() {
   const liest = BOOKS.filter(b => b.status === 'Wird gerade gelesen').length;
   const offen = BOOKS.filter(b => b.status === 'Noch nicht gelesen').length;
   const themenSet = new Set();
-  BOOKS.forEach(b => splitThemen(b.thema).forEach(t => themenSet.add(t)));
+  BOOKS.forEach(b => splitThemes(b.thema).forEach(t => themenSet.add(t)));
   const themen = themenSet.size;
   const ratings = BOOKS.filter(b => b.rating).map(b => b.rating);
   const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length) : 0;
@@ -714,17 +720,17 @@ function updateStats() {
   document.getElementById('count-gelesen').textContent = gelesen;
   document.getElementById('count-liest').textContent = liest;
   document.getElementById('count-offen').textContent = offen;
-  document.getElementById('header-count').textContent = total + ' Bücher';
+  document.getElementById('header-count').textContent = total + ' books';
 }
 
-function splitThemen(thema) {
+function splitThemes(thema) {
   if (!thema) return [];
   return thema.split(/[,;|]+/).map(t => t.trim()).filter(Boolean);
 }
 
-function populateThemen() {
+function populateThemes() {
   const alle = new Set();
-  BOOKS.forEach(b => splitThemen(b.thema).forEach(t => alle.add(t)));
+  BOOKS.forEach(b => splitThemes(b.thema).forEach(t => alle.add(t)));
   const themen = [...alle].sort();
   const sel = document.getElementById('filter-thema');
   sel.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
