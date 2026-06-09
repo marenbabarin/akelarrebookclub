@@ -415,6 +415,116 @@
     color: var(--text);
   }
 
+  /* Themes overlay */
+  .themes-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .themes-overlay.open {
+    display: flex;
+  }
+
+  .themes-panel {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 720px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 36px 40px;
+    position: relative;
+  }
+
+  .themes-panel h2 {
+    font-family: 'Goudy Bookletter 1911', serif;
+    font-size: 26px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .themes-panel .subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  .themes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .theme-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .theme-name {
+    font-family: 'Goudy Bookletter 1911', serif;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .theme-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .themes-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--text-faint);
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: var(--radius);
+    transition: background 0.15s;
+  }
+
+  .themes-close:hover { background: var(--bg); color: var(--text); }
+
+  .themes-btn {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .themes-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    .themes-grid { grid-template-columns: 1fr; }
+    .themes-panel { padding: 24px 20px; }
+  }
+
   @media (max-width: 800px) {
     .layout { grid-template-columns: 1fr; }
     aside { border-right: none; border-bottom: 1px solid var(--border); }
@@ -456,6 +566,13 @@
     <div class="filter-section">
       <label>Search</label>
       <input type="text" id="search" placeholder="Title or author…">
+    </div>
+
+    <div class="filter-section">
+      <label>Themes Guide</label>
+      <button class="themes-btn" onclick="document.getElementById('themes-overlay').classList.add('open')">
+        ✦ What do our themes mean?
+      </button>
     </div>
 
     <div class="filter-section">
@@ -812,5 +929,115 @@ document.querySelectorAll('.rating-btn').forEach(btn => {
 
 loadFromSheets();
 </script>
+<div class="themes-overlay" id="themes-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="themes-panel">
+    <button class="themes-close" onclick="document.getElementById('themes-overlay').classList.remove('open')">✕</button>
+    <h2>Our Themes</h2>
+    <p class="subtitle">Each season Akelarre picks a theme — here's what they all mean.</p>
+    <div class="themes-grid">
+          <div class="theme-card">
+            <div class="theme-name">African Stories</div>
+            <div class="theme-desc">Books that center African authors or stories</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Akelarres</div>
+            <div class="theme-desc">Books about witches and covens</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Asian Stories</div>
+            <div class="theme-desc">Books that center Asian authors or stories</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Books that feed us</div>
+            <div class="theme-desc">Books about food and the role it plays in our lives</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Coming soon!</div>
+            <div class="theme-desc">Books with (upcoming) film/TV adaptations</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Cult Classics</div>
+            <div class="theme-desc">Books that are true classics</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Forgotten Futures</div>
+            <div class="theme-desc">Books that center on dystopian/utopian realities</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Frenemies</div>
+            <div class="theme-desc">Stories about friendships and fiendships</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Graphic Novels</div>
+            <div class="theme-desc">Books that are Graphic Novels</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Guiris Unite!</div>
+            <div class="theme-desc">Books about moving abroad</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">If Walls could talk</div>
+            <div class="theme-desc">Books in which places are the main characters</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">In Other Words</div>
+            <div class="theme-desc">Books that retell myth, fairytales, folklore, or classics</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Like Mother, like Daughter</div>
+            <div class="theme-desc">Books about the complicated relationships between mothers and daughters</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Living Fearless</div>
+            <div class="theme-desc">Stories about women who live fearlessly</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Memoirs</div>
+            <div class="theme-desc">Books that are Memoirs ;)</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Metamorphosis</div>
+            <div class="theme-desc">Books with protagonists that transform — literally and/or metaphorically</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Middle Eastern Stories</div>
+            <div class="theme-desc">Books that center Middle Eastern authors or stories</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Misfits</div>
+            <div class="theme-desc">Books about women that don't fit in — for one reason or another</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">New Beginnings</div>
+            <div class="theme-desc">Books about people starting over</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">On the Road</div>
+            <div class="theme-desc">Books that center around traveling</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">South American Stories</div>
+            <div class="theme-desc">Books that center South American authors or stories</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Strange Realities</div>
+            <div class="theme-desc">Books that explore magical realism and strange worlds</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">That Funny Feeling</div>
+            <div class="theme-desc">Books that reflect on current trends within our modern life</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Unfamiliar Surroundings</div>
+            <div class="theme-desc">Books set in uncommon places, uncommon countries, alternate realities</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Unhinged Girl Fiction</div>
+            <div class="theme-desc">Books with protagonists that are not just weird, they are downright unhinged</div>
+          </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
