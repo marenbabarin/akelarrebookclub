@@ -364,12 +364,6 @@
     color: var(--bg);
   }
 
-  .tag.tag-genre {
-    background: var(--accent-light);
-    border-color: var(--accent-light);
-    color: var(--accent);
-  }
-
   .tag.tag-country {
     background: var(--coral);
     border-color: var(--coral);
@@ -466,6 +460,18 @@
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
+
+  .themes-year {
+    font-family: 'Goudy Bookletter 1911', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--accent);
+    margin: 24px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .themes-year:first-of-type { margin-top: 0; }
 
   .theme-card {
     background: var(--bg);
@@ -600,15 +606,6 @@
     </div>
 
     <div class="filter-section">
-      <label>Genre</label>
-      <div class="select-wrapper">
-        <select id="filter-genre">
-          <option value="">All Genres</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="filter-section">
       <label>Status</label>
       <div class="status-pills">
         <button class="pill active" data-status="">All Books <span class="pill-count" id="count-all">0</span></button>
@@ -710,8 +707,7 @@ const SPALTEN_MAP = {
   'Storygraph':       'storygraph',
   'Thema':            'thema',
   'Status':           'status',
-  'Country':          'country',
-  'Genre':            'genre'
+  'Country':          'country'
 };
 
 let BOOKS = [];
@@ -772,7 +768,6 @@ async function loadFromSheets() {
     document.getElementById('app').style.display = 'grid';
     populateThemes();
     populateCountries();
-    populateGenres();
     updateStats();
     renderBooks();
   } catch (err) {
@@ -810,13 +805,11 @@ function renderBooks() {
   const sort = document.getElementById('sort').value;
 
   const country = document.getElementById('filter-country').value;
-  const genre = document.getElementById('filter-genre').value;
 
   let filtered = BOOKS.filter(b => {
     if (search && !b.titel.toLowerCase().includes(search) && !b.autor.toLowerCase().includes(search)) return false;
     if (thema && !splitThemes(b.thema).includes(thema)) return false;
     if (country && !splitThemes(b.country).includes(country)) return false;
-    if (genre && b.genre !== genre) return false;
     if (activeStatus && b.status !== activeStatus) return false;
     if (b.rating && b.rating < activeMinRating) return false;
     if (b.seiten && b.seiten > activeMaxPages) return false;
@@ -856,7 +849,6 @@ function renderBooks() {
           ${splitThemes(b.thema).map(t => `<span class="tag thema">${t}</span>`).join('')}
           ${b.seiten ? `<span class="tag">${b.seiten} p.</span>` : ''}
           ${splitThemes(b.country).map(c => `<span class="tag tag-country">${c}</span>`).join('')}
-          ${b.genre ? `<span class="tag tag-genre">${b.genre}</span>` : ''}
           <span class="tag ${statusTag(b.status)}">${STATUS_LABEL[b.status] || b.status}</span>
         </div>
         ${b.storygraph ? `<a class="storygraph-link" href="${b.storygraph}" target="_blank">Storygraph ↗</a>` : ''}
@@ -920,22 +912,9 @@ function populateCountries() {
   });
 }
 
-function populateGenres() {
-  const genres = [...new Set(BOOKS.map(b => b.genre).filter(Boolean))].sort();
-  const sel = document.getElementById('filter-genre');
-  sel.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
-  genres.forEach(g => {
-    const opt = document.createElement('option');
-    opt.value = g;
-    opt.textContent = g;
-    sel.appendChild(opt);
-  });
-}
-
 document.getElementById('search').addEventListener('input', renderBooks);
 document.getElementById('filter-thema').addEventListener('change', renderBooks);
 document.getElementById('filter-country').addEventListener('change', renderBooks);
-document.getElementById('filter-genre').addEventListener('change', renderBooks);
 document.getElementById('sort').addEventListener('change', renderBooks);
 document.getElementById('filter-pages').addEventListener('change', e => {
   activeMaxPages = parseInt(e.target.value);
@@ -967,6 +946,67 @@ loadFromSheets();
     <button class="themes-close" onclick="document.getElementById('themes-overlay').classList.remove('open')">✕</button>
     <h2>Our Themes</h2>
     <p class="subtitle">Each month we pick a theme — here's what they all mean.</p>
+    <h3 class="themes-year">2027</h3>
+    <div class="themes-grid">
+          <div class="theme-card">
+            <div class="theme-name">A Certain Age 👵</div>
+            <div class="theme-desc">Old women as protagonists</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">After the Storm 🌪️</div>
+            <div class="theme-desc">Post-apocalyptic books and SciFi</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Another Time and Place 🤴</div>
+            <div class="theme-desc">Historical Fiction/Non-Fiction</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Function and Form 📃</div>
+            <div class="theme-desc">Books that are bestsellers in 2027. Do they live up to the hype?</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Greatest Hits 🏆</div>
+            <div class="theme-desc">Books that have recently won literary prizes</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Imagined Realities 🧝</div>
+            <div class="theme-desc">Fantasy Novels</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Inner Child 👶</div>
+            <div class="theme-desc">Children's classics rediscovered as adults</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">It's Relative 🏘️</div>
+            <div class="theme-desc">Multi-generational stories</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Made in Spain 🐂</div>
+            <div class="theme-desc">Books by Spanish authors</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Off the Page 📺</div>
+            <div class="theme-desc">Books that have been/will be adapted as films/series</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Soul Catchers 🧫</div>
+            <div class="theme-desc">Stories about cults</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Stranger than Fiction 🤯</div>
+            <div class="theme-desc">Non-Fiction so crazy you couldn't make it up</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Thicker than Blood 🧑‍🤝‍🧑</div>
+            <div class="theme-desc">Books about platonic relationships</div>
+          </div>
+          <div class="theme-card">
+            <div class="theme-name">Uncover 🔎</div>
+            <div class="theme-desc">Journalistic Investigations</div>
+          </div>
+    </div>
+
+    <h3 class="themes-year">2026</h3>
     <div class="themes-grid">
           <div class="theme-card">
             <div class="theme-name">African Stories</div>
